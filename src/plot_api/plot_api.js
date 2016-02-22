@@ -289,6 +289,7 @@ Plotly.plot = function(gd, data, layout, config) {
         if(fullLayout._hasGL3D) plotRegistry.gl3d.plot(gd);
         if(fullLayout._hasGeo) plotRegistry.geo.plot(gd);
         if(fullLayout._hasGL2D) plotRegistry.gl2d.plot(gd);
+        if(fullLayout._hasGLoupe) plotRegistry.gloupe.plot(gd);
 
         // in case of traces that were heatmaps or contour maps
         // previously, remove them and their colorbars explicitly
@@ -1683,7 +1684,7 @@ Plotly.restyle = function restyle(gd, astr, val, traces) {
         flagAxForDelete = {};
 
     // for now, if we detect gl or geo stuff, just re-do the plot
-    if(fullLayout._hasGL3D || fullLayout._hasGeo || fullLayout._hasGL2D) {
+    if(fullLayout._hasGL3D || fullLayout._hasGeo || fullLayout._hasGL2D || fullLayout.hasGLoupe) {
         doplot = true;
     }
 
@@ -2311,7 +2312,7 @@ Plotly.relayout = function relayout(gd, astr, val) {
             // 3d or geo at this point just needs to redraw.
             if (p.parts[0].indexOf('scene') === 0) doplot = true;
             else if (p.parts[0].indexOf('geo') === 0) doplot = true;
-            else if(fullLayout._hasGL2D &&
+            else if((fullLayout._hasGLoupe || fullLayout._hasGL2D) &&
                 (ai.indexOf('axis') !== -1 || p.parts[0] === 'plot_bgcolor')
             ) doplot = true;
             else if(ai === 'hiddenlabels') docalc = true;
@@ -2419,6 +2420,13 @@ Plotly.relayout = function relayout(gd, astr, val) {
             }
 
             subplotIds = Plots.getSubplotIds(fullLayout, 'gl2d');
+            for(i = 0; i < subplotIds.length; i++) {
+                scene = fullLayout._plots[subplotIds[i]]._scene2d;
+                scene.updateFx(fullLayout);
+            }
+
+            // GLOUPE
+            subplotIds = Plots.getSubplotIds(fullLayout, 'gloupe');
             for(i = 0; i < subplotIds.length; i++) {
                 scene = fullLayout._plots[subplotIds[i]]._scene2d;
                 scene.updateFx(fullLayout);

@@ -148,7 +148,8 @@ plots.getSubplotIds = function getSubplotIds(layout, type) {
     // layout must be 'fullLayout' here
     if(type === 'cartesian' && !layout._hasCartesian) return [];
     if(type === 'gl2d' && !layout._hasGL2D) return [];
-    if(type === 'cartesian' || type === 'gl2d') {
+    if(type === 'gloupe' && !layout._hasGLoupe) return [];
+    if(type === 'cartesian' || type === 'gl2d' || type === 'gloupe') {
         return Object.keys(layout._plots);
     }
 
@@ -193,6 +194,15 @@ plots.getSubplotData = function getSubplotData(data, type, subplotId) {
         trace = data[i];
 
         if(type === 'gl2d' && plots.traceIs(trace, 'gl2d')) {
+            var spmatch = Plotly.Axes.subplotMatch,
+                subplotX = 'x' + subplotId.match(spmatch)[1],
+                subplotY = 'y' + subplotId.match(spmatch)[2];
+
+            if(trace[attr[0]]===subplotX && trace[attr[1]]===subplotY) {
+                subplotData.push(trace);
+            }
+        }
+        else if(type === 'gloupe' && plots.traceIs(trace, 'gloupe')) {
             var spmatch = Plotly.Axes.subplotMatch,
                 subplotX = 'x' + subplotId.match(spmatch)[1],
                 subplotY = 'y' + subplotId.match(spmatch)[2];
@@ -420,6 +430,7 @@ plots.supplyDefaults = function(gd) {
         else if(plots.traceIs(fullTrace, 'geo')) newFullLayout._hasGeo = true;
         else if(plots.traceIs(fullTrace, 'pie')) newFullLayout._hasPie = true;
         else if(plots.traceIs(fullTrace, 'gl2d')) newFullLayout._hasGL2D = true;
+        else if(plots.traceIs(fullTrace, 'gloupe')) newFullLayout._hasGLoupe = true;
         else if('r' in fullTrace) newFullLayout._hasPolar = true;
 
         _module = fullTrace._module;
@@ -578,6 +589,9 @@ plots.supplyDataDefaults = function(traceIn, i, layout) {
         coerceSubplotAttr('gl2d', 'xaxis');
         coerceSubplotAttr('gl2d', 'yaxis');
 
+        coerceSubplotAttr('gloupe', 'xaxis');
+        coerceSubplotAttr('gloupe', 'yaxis');
+
         if(plots.traceIs(traceOut, 'showLegend')) {
             coerce('showlegend');
             coerce('legendgroup');
@@ -634,6 +648,7 @@ plots.supplyLayoutGlobalDefaults = function(layoutIn, layoutOut) {
     coerce('_hasGeo');
     coerce('_hasPie');
     coerce('_hasGL2D');
+    coerce('_hasGLoupe');
 };
 
 plots.supplyLayoutModuleDefaults = function(layoutIn, layoutOut, fullData) {

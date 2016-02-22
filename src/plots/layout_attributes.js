@@ -188,6 +188,10 @@ module.exports = {
         valType: 'boolean',
         dflt: false
     },
+    _hasGLoupe: {
+        valType: 'boolean',
+        dflt: false
+    },
     _composedModules: {
         '*': 'Fx'
     },

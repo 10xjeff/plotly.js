@@ -62,6 +62,19 @@ module.exports = function toSVG(gd, format) {
         });
     }
 
+    var loupeIds = Plotly.Plots.getSubplotIds(fullLayout, 'gloupe'),
+        loupePlot;
+
+    for(i = 0; i < loupeIds.length; i++) {
+        loupePlot = fullLayout._plots[loupeIds[i]];
+        insertGlImage(fullLayout, loupePlot._scene2d, {
+            x: size.l,
+            y: size.t,
+            width: size.w,
+            height: size.h
+        });
+    }
+
     // Grab the geos off the geo-container and place them in geoimages
     var geoIds = Plotly.Plots.getSubplotIds(fullLayout, 'geo'),
         geoLayout,

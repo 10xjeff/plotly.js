@@ -34,7 +34,7 @@ axes.getFromTrace = axisIds.getFromTrace;
 // find the list of possible axes to reference with an xref or yref attribute
 // and coerce it to that list
 axes.coerceRef = function(containerIn, containerOut, td, axLetter) {
-    var axlist = td._fullLayout._hasGL2D ? [] : axes.listIds(td, axLetter),
+    var axlist = (td._fullLayout._hasGL2D || td._fullLayout._hasGLoupe) ? [] : axes.listIds(td, axLetter),
         refAttr = axLetter + 'ref',
         attrDef = {};
 
@@ -1161,7 +1161,8 @@ axes.getSubplots = function(gd, ax) {
 
         if(trace.visible === false || trace.visible === 'legendonly' ||
             !(Plotly.Plots.traceIs(trace, 'cartesian') ||
-                Plotly.Plots.traceIs(trace, 'gl2d'))
+                Plotly.Plots.traceIs(trace, 'gl2d') ||
+                Plotly.Plots.traceIs(trace, 'gloupe'))
         ) continue;
 
         var xId = trace.xaxis || 'x',

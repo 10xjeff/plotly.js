@@ -12,7 +12,7 @@
 var Plotly = require('../plotly');
 
 function getDelay(fullLayout) {
-    return (fullLayout._hasGL3D || fullLayout._hasGL2D) ? 500 : 0;
+    return (fullLayout._hasGL3D || fullLayout._hasGL2D || fullLayout._hasGLoupe) ? 500 : 0;
 }
 
 function getRedrawFunc(gd) {
@@ -20,7 +20,7 @@ function getRedrawFunc(gd) {
         var fullLayout = gd._fullLayout;
 
         // doesn't work presently (and not needed) for polar or gl
-        if(fullLayout._hasGL3D || fullLayout._hasGL2D ||
+        if(fullLayout._hasGL3D || fullLayout._hasGL2D || fullLayout._hasGLoupe ||
             (gd.data && gd.data[0] && gd.data[0].r)
         ) return;
 

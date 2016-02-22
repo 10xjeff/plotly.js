@@ -104,6 +104,7 @@ function getButtonGroups(gd, buttonsToRemove, buttonsToAdd) {
 
     var hasCartesian = fullLayout._hasCartesian,
         hasGL2D = fullLayout._hasGL2D,
+        hasGLoupe = fullLayout._hasGLoupe,
         allAxesFixed = areAllAxesFixed(fullLayout),
         dragModeGroup = [];
 

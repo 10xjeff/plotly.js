@@ -61,7 +61,7 @@ module.exports = function supplyLayoutDefaults(layoutIn, layoutOut, fullData) {
         return aNum - bNum;
     }
 
-    if(layoutOut._hasCartesian || layoutOut._hasGL2D || !fullData.length) {
+    if(layoutOut._hasCartesian || layoutOut._hasGL2D || layoutOut._hasGLoupe || !fullData.length) {
         // make sure there's at least one of each and lists are sorted
         if(!xaList.length) xaList = ['xaxis'];
         else xaList.sort(axSort);
